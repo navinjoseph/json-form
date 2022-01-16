@@ -11,10 +11,12 @@ export class Validator implements IValidator {
     values: IData;
     metaStorage: MetadataStorage;
     errors: Array<IError> = [];
+
     constructor(value: any) {
         this.values = value;
         this.metaStorage = new MetadataStorage().getMetadataStorage();
-
+        this.metaStorage.rebuildErrorMessage();
+        this.errors = this.metaStorage.validationMessages;
     }
 
     //TODO: make it async
@@ -27,34 +29,23 @@ export class Validator implements IValidator {
             }
         }
 
-        //TODO : make this is as a function and retrive the error form the metaStorage.
         return this.errors.length > 0 ? this.errors : true;
     }
 
 
     //TODO: make it async
     excecute(def: any, value: any, args: any) {
-        //  console.log(def.validator.validate(value, args));
-        if (!def.validator.validate(value, args)) {
-            // console.log('Error', def.validator.defaultMessage);
-
-
-            //if not joi validator get the default message and push to metaStorage.
-            this.errors.push({ message: def.validator.defaultMessage, name: def.targetName });
-
-            //TODO : if joi validator get message from the validator and push to metaStorage.
-
-
+        if (!def.validator.validate(value, args)) { 
+            const message = typeof def.validator.defaultMessage === 'function' ? def.validator.defaultMessage(value, args) : def.validator.defaultMessage;
+            this.metaStorage.addMessgeMetaData({ message: message, name: def.targetName });
         }
     }
-
+    
     get Error(): IError[] {
-        //TODO: Get the error from metaStorage.
         return this.errors;
     }
 
     get hasError() {
-        //TODO: Get the error from metaStorage.
         return this.errors.length > 0;
     }
 

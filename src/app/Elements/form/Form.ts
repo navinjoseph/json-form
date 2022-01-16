@@ -4,7 +4,7 @@ import IEvent from "../../Event/IEvent";
 import AbstractTemplate from "../../render/AbstractTemplate";
 import TForm from '../../template/form.handlebars';
 import { Validator } from "../../validation/validator/validator";
-import FormDataDataAdapter from "../../Data/FormDataAdapter";
+import FormDataAdapter from "../../Data/FormDataAdapter";
 
 
 
@@ -24,7 +24,7 @@ export function FromSubmitCallback(e: Event | any, callback: Function) {
     e.preventDefault();
 
     const FromValue =  getFromData(e?.target);
-    const Data = new FormDataDataAdapter(FromValue)
+    const Data = new FormDataAdapter(FromValue)
     const validation = new Validator(Data);
     
     //TODO: make it async

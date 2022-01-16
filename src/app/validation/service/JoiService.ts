@@ -15,20 +15,10 @@ export default class JoiService implements IValidationService {
     public validate(value: any, schema: any): any { 
         Joi.valid()
         //return Joi.validate(value, schema);
-        console.log('service', schema);
        // return schema.validate(data);
     }
 
-    public compile(defenition: any): any {
-        //create a custom compile function.
-        // type: 'string',
-        // valid: ['key'],
-        // pattern: /^[a-zA-Z0-9]+$/,
-        // min: 10,
-        // max: 20,
-        // required: true
-        console.log(defenition);
-        
+    public compile(defenition: any): any {   
         return Joi.compile(defenition);
     }
 

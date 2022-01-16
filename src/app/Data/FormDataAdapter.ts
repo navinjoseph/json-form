@@ -1,6 +1,6 @@
 import { IData } from "./IData";
 
-export default class FormDataDataAdapter implements IData {
+export default class FormDataAdapter implements IData {
     Data: FormData | string;
     constructor(data: string | FormData) {
         this.Data = data;

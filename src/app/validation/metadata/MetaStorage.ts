@@ -1,7 +1,8 @@
-import { getGlobal } from '../../utils/getGlobal'
-import { ValidationSchema } from '../schema/ValidationSchema'
-import { ValidationArguments } from '../ValidationArguments'
-import ImetaStorage from './ImetaStorage'
+import { getGlobal } from '../../utils/getGlobal';
+import { ValidationSchema } from '../schema/ValidationSchema';
+import { ValidationArguments } from '../ValidationArguments';
+import { ValidationMessage } from '../ValidationMessage';
+import ImetaStorage from './ImetaStorage';
 
 export class MetadataStorage implements ImetaStorage {
   // -------------------------------------------------------------------------
@@ -9,6 +10,7 @@ export class MetadataStorage implements ImetaStorage {
   // -------------------------------------------------------------------------
 
   private validationSchema: ValidationArguments[] = []
+  private vaidationMessage: ValidationMessage[] = [];
   private constraintMetadatas: any[] = []
 
 
@@ -18,6 +20,10 @@ export class MetadataStorage implements ImetaStorage {
 
   get validationschema(): ValidationArguments[] {
     return this.validationSchema;
+  }
+
+  get validationMessages(): ValidationMessage[] {
+    return this.vaidationMessage;
   }
 
   /**
@@ -33,6 +39,20 @@ export class MetadataStorage implements ImetaStorage {
    */
   addValidationMetadata(metadata: any): void {
     this.validationSchema.push(metadata)
+  }
+
+  rebuildErrorMessage() : void{
+    this.vaidationMessage = [];
+  }
+
+  addMessgeMetaData(data: ValidationMessage) {
+    //replace the message if the name is same.
+    const index = this.vaidationMessage.findIndex(x => x.name === data.name)
+    if (index > -1) {
+      this.vaidationMessage[index] = data
+    } else {
+      this.vaidationMessage.push(data)
+    }
   }
 
   getMetadataStorage(): MetadataStorage {
