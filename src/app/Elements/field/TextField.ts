@@ -49,6 +49,7 @@ export class TextField extends AbstractTemplate implements IElementFieldArttibut
         placeholder: param.placeholder,
         validation: param.validation,
         label: param.label,
+        extraAttr: param.extra,
         min: param.extra?.max,
         max: param.extra?.max,
         error: param?.error,

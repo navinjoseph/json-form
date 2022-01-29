@@ -103,10 +103,7 @@
               },
             }
           ],
-          extra: {
-            min: 1,
-            max: 10,
-          },
+         
         },
         {
           label: "Agreement 1",
@@ -155,6 +152,17 @@
           id: "email",
           name: "email",
           className: "form-field",
+          validation: [
+            {
+              type: 'joi',
+              validatorCallback: function(Joi) {
+                return Joi.string().email({ allowFullyQualified: true, minDomainSegments: 2, tlds: false }).messages({
+                  "string.empty": "Email is required",
+                }).label('Email');
+              },
+            }
+          ],
+          
         },
         {
           label: "File",

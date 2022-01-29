@@ -17,7 +17,7 @@ export default class Render implements Irender {
     }
 
     compile() {                                        
-        let template = this.templateEngine.compile(this.template);        
+        let template = this.templateEngine.compile(this.template);                
         return template(...this.params);
     }
 }
