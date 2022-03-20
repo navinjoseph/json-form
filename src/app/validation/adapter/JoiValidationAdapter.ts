@@ -26,7 +26,6 @@ export default class JoiValidationAdapter implements IValidationAdpater {
 
     public validate<T = ValidationResult>(): T  {
         if(this.JoiService.isValidSchema(this.Joischema)) {
-        //  console.log('validate joi', this.Joischema.validate(this.value));
             return this.Joischema.validate(this.value);
         }
 

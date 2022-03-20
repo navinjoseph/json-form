@@ -4,6 +4,7 @@ import chaiDom, { document } from 'chai-dom'
 import { form } from '../index.ts'
 import { describe } from 'mocha'
 import ValidatorFactory from '../factory/ValidatorFactory'
+import fs from 'fs';
 
 chai.use(chaiDom)
 
@@ -165,12 +166,12 @@ describe('Test Joi validator', function () {
     name: 'username',
   }
 
-  const ValidationArguments = {
-    type: meta.type,
-    constraints: meta.constraints,
-    targetName: param.name,
-    validatorCallback: meta.validatorCallback,
-  }
+  // const ValidationArguments = {
+  //   type: meta.type,
+  //   constraints: meta.constraints,
+  //   targetName: param.name,
+  //   validatorCallback: meta.validatorCallback,
+  // }
 
   const ValidationOptions = {
     message: meta.message,
@@ -203,6 +204,55 @@ describe('Test Joi validator', function () {
   // });
 })
 
+
+// describe('Test input file', function () {
+//   const readFile = fs.readFileSync('/Users/navinjoseph/Navinjoseph/json-form/src/app/test/assets/test1.jpg');
+//   const meta = {
+//     type: 'joi',
+//     constraints: {},
+//     validatorCallback: (Joi) => {
+//       return Joi.object().keys({
+//         name: Joi.string().required(),
+//         size: Joi.number().max(100178).required(),
+//         type: Joi.string().pattern(/(image\/jpeg)|(application\/pdf)/),
+//         lastModified: Joi.any().required(),
+//         webkitRelativePath: Joi.any().required(),
+//       }).messages({
+//           "string.empty": "File is required",
+//           "number.max": "File size should be less than 100kb",
+//           "string.pattern.base": "File type should be jpeg",
+//         })
+//         .label("File");
+//     },
+//     message: 'joi Validatior',
+//   }
+//   const param = {
+//     name: 'file',
+//   }
+
+//   const ValidationArguments = {
+//     type: meta.type,
+//     constraints: meta.constraints,
+//     targetName: param.name,
+//     validatorCallback: meta.validatorCallback,
+//   }
+
+//   const ValidationOptions = {
+//     message: meta.message,
+//   }
+
+//   const instance = new ValidatorFactory(ValidationArguments, ValidationOptions)
+
+//   it('should return Error', function () {
+//     expect(
+//       {
+//         value: '',
+//         error: [],
+//       },
+//       instance.validator.validate(readFile),
+//     )
+//   })
+// });
 
 // describe('Render Forms and Fields', function () {
 //   const TestFormAndFields = {
