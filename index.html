@@ -1,265 +1,294 @@
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/dist/index.bundle.js"></script>
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="/dist/index.bundle.js"></script>
-  <title>Document</title>
-</head>
+  <body>
+    <h1>Hello World</h1>
+    <App id="app"></App>
+  </body>
 
-<body>
-  <h1>Hello World</h1>
-  <App id="app"></App>
-</body>
-
-<script>
-  (function (exports) {
-    // your page initialization code here
-    // the DOM will be available here
-    const app = document.getElementById('app')
-    const Form = {
-      Form: {
-        FieldType: 'form',
-        name: 'login-form',
-        id: 'login-form',
-        className: 'login-form',
-        method: '',
-        onSubmit: function(e, validation) {    
-          if(!validation.hasError){
-            console.log('next process');
-          }  
-        },
-        event: [
-          //add default onsubmit and  add anyother events.
-          {
-            event: 'mouseover',
-            callbackfn: (e) => {
-              e.preventDefault()
-             //  console.log('submit')
+  <script>
+    (function (exports) {
+      // your page initialization code here
+      // the DOM will be available here
+      const app = document.getElementById("app");
+      const Form = {
+        Form: {
+          FieldType: "form",
+          name: "login-form",
+          id: "login-form",
+          className: "login-form",
+          method: "",
+          onSubmit: function (e, validation) {
+            if (!validation.hasError) {
+              console.log("next process");
             }
+          },
+          event: [
+            //add default onsubmit and  add anyother events.
+            {
+              event: "mouseover",
+              callbackfn: (e) => {
+                e.preventDefault();
+                //  console.log('submit')
+              },
+            },
+          ],
+        },
+        Field: [
+          {
+            label: "UserName",
+            FieldType: "text",
+            id: "TestID",
+            name: "username",
+            className: "ClassName",
+            placeholder: "User name",
+            value: "",
+            event: [
+              {
+                event: "change",
+                callbackfn: (e) => {
+                  //  console.log(e.target.value)
+                },
+              },
+            ],
+            error: {
+              as: "span",
+            },
+            validation: [
+              {
+                type: "joi",
+                validatorCallback: function (Joi) {
+                  return Joi.string().min(10).required().messages({
+                    "string.empty": "UserName is required",
+                    "string.min":
+                      "UserName should be atleast 10 characters long",
+                  });
+                },
+              },
+            ],
+            extra: {
+              min: 1,
+              max: 10,
+            },
+          },
+          {
+            label: "Password",
+            FieldType: "password",
+            id: "user-password",
+            placeholder: "Password",
+            name: "user-password",
+            className: "ClassName",
+            value: "",
+            event: [
+              {
+                event: "change",
+                callbackfn: (e) => {
+                  //  console.log(e.target.value)
+                },
+              },
+            ],
+            validation: [
+              {
+                type: "joi",
+                validatorCallback: function (Joi) {
+                  return Joi.string()
+                    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+                    .messages({
+                      "string.empty": "Password is required",
+                      "string.pattern.base":
+                        "Password must be 3 to 30 characters",
+                    });
+                },
+              },
+            ],
+          },
+          {
+            label: "Agreement 1",
+            FieldType: "checkbox",
+            id: "accept-aggrement",
+            name: "accept-aggrement",
+            className: "form-field",
+            validation: [
+              {
+                type: "customValidator",
+                validatorCallback: function (value, args) {
+                  console.log("customValidator", value, args);
+                  return value === true;
+                },
+                message: "You must accept the aggrement",
+              },
+            ],
+          },
+          {
+            label: "Agreement 2",
+            FieldType: "checkbox",
+            id: "accept-aggrement-2",
+            name: "accept-aggrement-2",
+            className: "form-field",
+            validation: [
+              {
+                type: "customValidator",
+                validatorCallback: function (value, args) {
+                  console.log("customValidator", value, args);
+                  return value === true;
+                },
+                message: "You must accept the aggrement no 2",
+              },
+            ],
+          },
+          {
+            label: "TextArea",
+            FieldType: "textarea",
+            id: "textarea",
+            name: "textarea",
+            className: "form-field",
+          },
+          {
+            label: "Email",
+            FieldType: "email",
+            id: "email",
+            name: "email",
+            className: "form-field",
+            validation: [
+              {
+                type: "joi",
+                validatorCallback: function (Joi) {
+                  return Joi.string()
+                    .email({
+                      allowFullyQualified: true,
+                      minDomainSegments: 2,
+                      tlds: false,
+                    })
+                    .messages({
+                      "string.empty": "Email is required",
+                    })
+                    .label("Email");
+                },
+              },
+            ],
+          },
+          {
+            label: "File",
+            FieldType: "file",
+            id: "file",
+            name: "file",
+            className: "form-field",
+            validation: [
+              {
+                type: "joi",
+                validatorCallback: function (Joi) {
+                  return Joi.object().keys({
+                    name: Joi.string().required(),
+                    size: Joi.number().max(100178).required(),
+                    type: Joi.string().pattern(/(image\/jpeg)|(application\/pdf)/),
+                    lastModified: Joi.any().required(),
+                    webkitRelativePath: Joi.any().required(),
+                  }).messages({
+                      "string.empty": "File is required",
+                      "number.max": "File size should be less than 100kb",
+                      "string.pattern.base": "File type should be jpeg",
+                    })
+                    .label("File");
+                },
+              },
+            ],
+          },
+          {
+            label: "Image",
+            FieldType: "image",
+            id: "image",
+            name: "image",
+            className: "form-field",
+          },
+          {
+            label: "Month",
+            FieldType: "month",
+            id: "month",
+            name: "month",
+            className: "form-field",
+          },
+          {
+            label: "Week",
+            FieldType: "week",
+            id: "week",
+            name: "week",
+            className: "form-field",
+          },
+
+          {
+            label: "Number",
+            FieldType: "number",
+            id: "number",
+            name: "number",
+            className: "form-field",
+          },
+          {
+            label: "radio",
+            FieldType: "radio",
+            id: "radio1",
+            name: "radio1",
+            className: "form-field",
+          },
+          {
+            label: "range",
+            FieldType: "range",
+            id: "range",
+            name: "range",
+            className: "form-field",
+          },
+          {
+            label: "Search",
+            FieldType: "search",
+            id: "search",
+            name: "search",
+            className: "form-field",
+          },
+          {
+            label: "Telephone",
+            FieldType: "tel",
+            id: "tel",
+            name: "tel",
+            className: "form-field",
+          },
+          {
+            label: "URL",
+            FieldType: "url",
+            id: "url",
+            name: "url",
+            className: "form-field",
+          },
+          {
+            label: "Reset",
+            FieldType: "reset",
+            id: "reset-button",
+            name: "reset",
+            className: "btn-field",
+          },
+          {
+            label: "Submit",
+            FieldType: "submit",
+            id: "submit-button",
+            className: "btn-name",
+            event: [
+              {
+                event: "onmouseover",
+                callbackfn: function (e) {
+                  console.log(e);
+                },
+              },
+            ],
           },
         ],
-      },
-      Field: [
-        {
-          label: 'UserName',
-          FieldType: 'text',
-          id: 'TestID',
-          name: "username",
-          className: 'ClassName',
-          placeholder: 'User name',
-          value: '',
-          event: [{
-            event: "change",
-             callbackfn: (e) => {
-            //  console.log(e.target.value)
-            }
+      };
 
-          }],
-          error: {
-            as: 'span',
-          },
-          validation: [
-            {
-              type: 'joi',
-              validatorCallback: function(Joi) {
-                return Joi.string().min(10).required().messages({
-                  "string.empty": "UserName is required",
-                  "string.min": "UserName should be atleast 10 characters long"
-
-                })
-              },
-            }
-          ],
-          extra: {
-            min: 1,
-            max: 10,
-          },
-        },
-        {
-          label: 'Password',
-          FieldType: 'password',
-          id: 'user-password',
-          placeholder: "Password",
-          name: "user-password",
-          className: 'ClassName',
-          value: '',
-          event:  [{
-            event: "change",
-             callbackfn: (e) => {
-            //  console.log(e.target.value)
-            }
-
-          }],
-          validation: [
-            {
-              type: 'joi',
-              validatorCallback: function(Joi) {
-                return Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).messages({
-                  "string.empty": "Password is required",
-                  "string.pattern.base": "Password must be 3 to 30 characters"
-                })
-              },
-            }
-          ],
-         
-        },
-        {
-          label: "Agreement 1",
-          FieldType: 'checkbox',
-          id: "accept-aggrement",
-          name: "accept-aggrement",
-          className: "form-field",
-          validation: [
-            {
-              type: 'customValidator',
-              validatorCallback: function(value, args) {
-                console.log('customValidator', value, args)
-                return value === true;
-              },
-              message: 'You must accept the aggrement'
-            }
-          ]
-        },
-        {
-          label: "Agreement 2",
-          FieldType: 'checkbox',
-          id: "accept-aggrement-2",
-          name: "accept-aggrement-2",
-          className: "form-field",
-          validation: [
-            {
-              type: 'customValidator',
-              validatorCallback: function(value, args) {
-                console.log('customValidator', value, args)
-                return value === true;
-              },
-              message: 'You must accept the aggrement no 2'
-            }
-          ]
-        },
-        {
-          label: "TextArea",
-          FieldType: 'textarea',
-          id: "textarea",
-          name: "textarea",
-          className: "form-field",
-        },
-        {
-          label: "Email",
-          FieldType: 'email',
-          id: "email",
-          name: "email",
-          className: "form-field",
-          validation: [
-            {
-              type: 'joi',
-              validatorCallback: function(Joi) {
-                return Joi.string().email({ allowFullyQualified: true, minDomainSegments: 2, tlds: false }).messages({
-                  "string.empty": "Email is required",
-                }).label('Email');
-              },
-            }
-          ],
-          
-        },
-        {
-          label: "File",
-          FieldType: 'file',
-          id: "file",
-          name: "file",
-          className: "form-field",
-        },
-        {
-          label: "Image",
-          FieldType: 'image',
-          id: "image",
-          name: "image",
-          className: "form-field",
-        },
-        {
-          label: "Month",
-          FieldType: 'month',
-          id: "month",
-          name: "month",
-          className: "form-field",
-        },
-        {
-          label: "Week",
-          FieldType: 'week',
-          id: "week",
-          name: "week",
-          className: "form-field",
-        },
-        
-        {
-          label: "Number",
-          FieldType: 'number',
-          id: "number",
-          name: "number",
-          className: "form-field",
-        },
-        {
-          label: "radio",
-          FieldType: 'radio',
-          id: "radio1",
-          name: "radio1",
-          className: "form-field",
-        },
-        {
-          label: "range",
-          FieldType: 'range',
-          id: "range",
-          name: "range",
-          className: "form-field",
-        },
-        {
-          label: "Search",
-          FieldType: 'search',
-          id: "search",
-          name: "search",
-          className: "form-field",
-        },
-        {
-          label: "Telephone",
-          FieldType: 'tel',
-          id: "tel",
-          name: "tel",
-          className: "form-field",
-        },
-        {
-          label: "URL",
-          FieldType: 'url',
-          id: "url",
-          name: "url",
-          className: "form-field",
-        },
-        {
-          label: "Reset",
-          FieldType: 'reset',
-          id: "reset-button",
-          name: "reset",
-          className: "btn-field",
-        },
-        {
-          label: "Submit",
-          FieldType: "submit",
-          id: 'submit-button',
-          className: 'btn-name',
-          event: [{
-            event: 'onmouseover',
-            callbackfn: function (e) {
-              console.log(e)
-            }
-          }],
-        }
-      ]
-    };
-
-    let NewForm = form
-    app.innerHTML = NewForm.form(Form)
-  })()
-</script>
-
+      let NewForm = form;
+      app.innerHTML = NewForm.form(Form);
+    })();
+  </script>
 </html>

@@ -24,7 +24,7 @@ export function FromSubmitCallback(e: Event | any, callback: Function) {
     e.preventDefault();
 
     const FromValue =  getFromData(e?.target);
-    const Data = new FormDataAdapter(FromValue)
+    const Data = new FormDataAdapter(FromValue);
     const validation = new Validator(Data);
     
     //TODO: make it async
