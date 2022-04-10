@@ -114,10 +114,12 @@
             id: "accept-aggrement",
             name: "accept-aggrement",
             className: "form-field",
+            value: 0,
             validation: [
               {
                 type: "customValidator",
-                validatorCallback: function (value, args) {
+                validatorCallback: async function (value, args) {
+                  console.log('value', value);
                   console.log("customValidator", value, args);
                   return value === true;
                 },

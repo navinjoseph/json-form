@@ -19,6 +19,7 @@ export class Validator implements IValidator {
         this.errors = this.metaStorage.validationMessages;
     }
 
+
     //TODO: make it async
     validate(args?: any) {
         if (this.metaStorage.hasValidationMetaData) {
@@ -32,6 +33,7 @@ export class Validator implements IValidator {
         return this.errors.length > 0 ? this.errors : true;
     }
 
+    
 
     //TODO: make it async
     excecute(def: any, value: any, args: any) {
@@ -40,7 +42,29 @@ export class Validator implements IValidator {
             this.metaStorage.addMessgeMetaData({ message: message, name: def.targetName });
         }
     }
+
     
+     async validateAsync(args?: any) : Promise<Array<IError>>  { 
+        if (this.metaStorage.hasValidationMetaData) {
+            for (let def of this.metaStorage.validationschema) {
+                const value = this.values.get(def.targetName);
+                const args: any = def;
+                await this.excecuteAsync(def, value, args);
+            }
+        }
+
+        return this.errors.length > 0 ? this.errors : [];
+    }
+
+   async excecuteAsync(def: any, value: any, args: any) {
+       const validator  = await def.validator.validateAsync(value, args)
+        if (!validator) { 
+            const message = typeof def.validator.defaultMessage === 'function' ? def.validator.defaultMessage(value, args) : def.validator.defaultMessage;
+            this.metaStorage.addMessgeMetaData({ message: message, name: def.targetName });
+        }
+    }
+
+
     get Error(): IError[] {
         return this.errors;
     }
