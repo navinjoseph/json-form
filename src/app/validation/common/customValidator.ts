@@ -11,6 +11,7 @@ export function CustomValidator(ValidationArguments?: ValidationArguments, valid
     name: CUSTOM_VALIDATOR,
     validator: {
         validate: (value: any, args : any) : boolean => ValidationArguments?.validatorCallback(value, args),
+        validateAsync: async (value: any, args : any) : Promise<boolean> => await ValidationArguments?.validatorCallback(value, args),
         defaultMessage: validationOptions?.message ||  buildMessage(eachPrefix => eachPrefix + '$property must be empty', validationOptions),
     },
 };

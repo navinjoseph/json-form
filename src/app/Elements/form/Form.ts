@@ -6,6 +6,10 @@ import TForm from '../../template/form.handlebars';
 import { Validator } from "../../validation/validator/validator";
 import FormDataAdapter from "../../Data/FormDataAdapter";
 
+interface IError {
+    message: string;
+    name: string;
+}
 
 
 
@@ -28,11 +32,16 @@ export function FromSubmitCallback(e: Event | any, callback: Function) {
     const validation = new Validator(Data);
     
     //TODO: make it async
-    validation.validate()
-    validation.buildError(validation.Error);
+    //validation.validate()
+    //if async 
+    validation.validateAsync().then((error: IError[] ) => {
+        validation.buildError(error);
+        console.log('async', error);
+        callback(e, validation);
+    });
 
 
-    callback(e, validation);
+
 }
 
 export default class Form extends AbstractTemplate implements IForm {
@@ -70,9 +79,7 @@ export default class Form extends AbstractTemplate implements IForm {
         return [{
             id: param.id,
             event: 'submit',
-            callbackfn: (e: Event) => {
-                FromSubmitCallback(e, param.onSubmit);
-            }
+            callbackfn: (e: Event) => FromSubmitCallback(e, param.onSubmit)
         }]
     }
 }
